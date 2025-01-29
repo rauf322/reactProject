@@ -1,39 +1,21 @@
 //index.js
-import {useState, useEffect} from "react"
-import {createRoot} from "react-dom/client"
+import React, { useState } from "react";
+import "./style/style.css";
+import PostList from "./components/PostList";
+import PostForm from "./components/PostForm";
 
-export default function Paypal() {
-  const [transfers, setTransfers] = useState(() => {
-    return JSON.parse(localStorage.getItem("transfers"))
-  })
+export default function App() {
 
-  useEffect(() => {
-    localStorage.setItem("transfers", JSON.stringify(transfers))
-  }, [transfers])
+  const [posts, setPosts] = useState([]); // Array to hold posts
 
-  function handleReceiveClick() {
-    setTransfers([...transfers, 10])
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
   }
   
-  function handleSendClick() {
-    setTransfers([...transfers, -10])
-  }
-
-  function handleResetClick() {
-    setTransfers([])
-  }
-
-  const balance = transfers.reduce((sum, amount) => sum + amount, 0)
-
-  return <>
-    <button onClick={handleReceiveClick}>Принять 10</button>
-    <button onClick={handleSendClick}>Перевести 10</button>
-    <h2>Баланс: {balance}</h2>
-    <button onClick={handleResetClick}>Сброс</button>
-    <ul>
-      {transfers.map(
-        (transfer, index) => <li key={index}>{transfer}</li>
-      )}
-    </ul>
-  </>
+  return (
+    <div className="App">
+      <PostForm create ={createPost}/>
+      <PostList posts={posts} title={"Java"}/>
+    </div>
+  )
 }
