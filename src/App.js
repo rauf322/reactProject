@@ -3,29 +3,27 @@ import React, { useMemo, useState } from "react";
 import "./style/style.css";
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
-import MySelect from "./components/UI/select/MySelect";
-import MyInput from "./components/UI/input/MyInput";
+import PostFilter from "./components/PostFilter";
 
 export default function App() {
   // State variables
   const [posts, setPosts] = useState([]);
-  const [selectedSort, setSelectedSort] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filter,setFilter] = useState({sort:'', query:''});
 
 
   // Sorted posts to display and we useMemo to avoid re-rendering
   const sortedPosts = useMemo(() => {
     console.log('Function getSortedPosts called');
-    if (selectedSort) {
-      return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]));
+    if (filter.sort) {
+      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
     }
     return posts;
-  },[selectedSort, posts]);
+  },[filter.sort, posts]);
 
   // Search posts to display and we useMemo to avoid re-rendering and send sortedPosts to make PostList sorting list by selectSort
   const sortedAndSearchPosts = useMemo(() => {
-    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  }, [searchQuery, sortedPosts]);
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()));
+  }, [filter.query, sortedPosts]);
 
   // Function to create a new post we send to PostForm component
   const createPost = (newPost) => {
@@ -37,32 +35,13 @@ export default function App() {
     setPosts(posts.filter(p => p.id !== post.id));
   };
 
-  // Function to handle sorting
-  const sortPosts = (sort) => {
-    setSelectedSort(sort);
-  };
 
   return (
     <div className="App">
       <PostForm create={createPost} />
       <hr style={{ margin: '15px 0' }} />
-      <div>
-        <MyInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Search"
-        />
-        <MySelect
-          value={selectedSort}
-          onChange={sortPosts}
-          defaultValue="Sort by"
-          options={[
-            { value: 'title', name: 'By name' },
-            { value: 'desc', name: 'By description' }
-          ]}
-        />
-      </div>
-      {posts.length ? (
+      <PostFilter filter={filter} setFilter={setFilter} />
+      {sortedAndSearchPosts.length ? (
         <PostList remove={removePost} posts={sortedAndSearchPosts} title={"React APP 3 hours!"} />
       ) : (
         <h1 style={{ textAlign: "center" }}>No posts</h1>
