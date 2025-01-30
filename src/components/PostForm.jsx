@@ -34,7 +34,7 @@ const PostForm = ({create}) => {
             <form onSubmit={addPost}>
             <MyInput type="text" placeholder="Name of Title" onChange={handleTitle} value={post.title}/>
             <MyInput type="text" placeholder="Description" onChange={handleDesc} value={post.desc}/>
-            <MyButton type="submit" >Add</MyButton>
+            <MyButton type="submit">Add</MyButton>
       </form>
     </div>
     );
