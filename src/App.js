@@ -1,11 +1,12 @@
 //index.js
-import React, { useMemo, useState } from "react";
-import "./style/style.css";
+import React, { useState } from "react";
+import "./style/App.css";
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import MyButton from "./components/UI/button/MyButton";
 import MyModal from "./components/UI/Modal/MyModal";
+import { usePosts } from "./hooks/usePosts";
 
 export default function App() {
   // State variables
@@ -13,20 +14,9 @@ export default function App() {
   const [filter,setFilter] = useState({sort:'', query:''});
 
   const [modal, setModal] = useState(false);
-  
-  // Sorted posts to display and we useMemo to avoid re-rendering
-  const sortedPosts = useMemo(() => {
-    console.log('Function getSortedPosts called');
-    if (filter.sort) {
-      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
-    }
-    return posts;
-  },[filter.sort, posts]);
 
-  // Search posts to display and we useMemo to avoid re-rendering and send sortedPosts to make PostList sorting list by selectSort
-  const sortedAndSearchPosts = useMemo(() => {
-    return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()));
-  }, [filter.query, sortedPosts]);
+  const sortedAndSearchPosts = usePosts(posts, filter.sort, filter.query);
+  
 
   // Function to create a new post we send to PostForm component
   const createPost = (newPost) => {
