@@ -3,7 +3,7 @@ import MyButton from './UI/button/MyButton';
 const Post = (props) => {
 
   const {post, number, remove} = props
-  const {title, desc} = post
+  const {title, body} = post
     return (
     <div className = "post">
         <div className="post__content">
@@ -11,7 +11,7 @@ const Post = (props) => {
             {number} {title}
           </strong>
           <div>
-            {desc}
+            {body}
           </div>
         </div>
         <div className="post__btns">

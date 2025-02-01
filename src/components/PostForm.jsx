@@ -5,17 +5,17 @@ import { useState } from 'react';
 
 const PostForm = ({create}) => {
 
-    const [post, setPost] = useState({title: '', desc: ''})
+    const [post, setPost] = useState({title: '', body: ''})
 
   
     const addPost = (e) => {
       e.preventDefault()
-      if(post.title.length > 0 && post.desc.length > 0){
+      if(post.title.length > 0 && post.body.length > 0){
         const newPost = {
           ...post, id: Date.now()
         }
         create(newPost)
-        setPost({title: '', desc: ''})
+        setPost({title: '', body: ''})
       }else{
         alert('Please fill the form')
       }
@@ -26,14 +26,14 @@ const PostForm = ({create}) => {
     }
   
     const handleDesc = (e) => {
-      setPost({...post, desc: e.target.value})
+      setPost({...post, body: e.target.value})
     }
 
     return (
         <div>
             <form onSubmit={addPost}>
             <MyInput type="text" placeholder="Name of Title" onChange={handleTitle} value={post.title}/>
-            <MyInput type="text" placeholder="Description" onChange={handleDesc} value={post.desc}/>
+            <MyInput type="text" placeholder="Description" onChange={handleDesc} value={post.body}/>
             <MyButton type="submit">Add</MyButton>
       </form>
     </div>
